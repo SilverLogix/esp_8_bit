@@ -1,54 +1,74 @@
-# **ESP_8_BIT:** Atari 8 bit computers, NES and SMS game consoles on your TV with nothing more than a ESP32 and a sense of nostalgia
-## Supports NTSC/PAL color composite video output, Bluetooth Classic or IR keyboards and joysticks; just the thing when we could all use a little distraction
+# **ESP_8_BIT:** ~~Atari 8 bit computers,~~ NES ~~and SMS game consoles~~ console on your ~~TV~~ TFT ILI9341 with nothing more than a ESP32 and a sense of nostalgia
+## ~~Supports NTSC/PAL color composite video output,~~ Bluetooth Classic or IR keyboards and joysticks; just the thing when we could all use a little distraction
+## Supports classic NES (or SNES) one or two controllers hardwired to the ESP32. SELECT + LEFT to access file menu. SELECT + START -> reset, SD card support FAT 8.3 filenames
+## TODO: Supports controller over WiFi
 
 ![ESP_8_BIT](img/esp8bit.jpg)
 
 **ESP_8_BIT** is designed to run on the ESP32 within the Arduino IDE framework. See it in action on [Youtube](https://www.youtube.com/watch?v=qFRkfeuTUrU). Schematic is pretty simple:
 
-```
-    -----------
-    |         |
-    |      25 |------------------> video out
-    |         |
-    |      18 |---/\/\/\/----|---> audio out
-    |         |     1k       |
-    |         |             ---
-    |  ESP32  |             --- 10nf
-    |         |              |
-    |         |              v gnd
-    |         |
-    |         |     3.3v <--+-+   IR Receiver
-    |         |      gnd <--|  )  TSOP4838 etc.
-    |       0 |-------------+-+   (Optional)
-    -----------
+![Build](img/gameboy_fit.png)
+
+The build can fit inside a gameboy clam shell with real NES connectors.
 
 ```
-Audio is on pin 18 by default but can be remapped.
+     ---------  
+    |         | 
+    |      25 |------------> video out
+    |         | 
+    |      18 |--/\/\/--+--> audio out
+    |         |   1k    |
+    |         |        === 10nf
+    |  ESP32  |         |
+    |         |         v gnd
+    |         | 
+    |      17 |------------> NES (or SNES) controller DATA B
+    |      21 |------------> NES (or SNES) controller DATA A
+    |      22 |------------> NES (or SNES) controller CLOCK A&B
+    |      27 |------------> NES (or SNES) controller LATCH A&B
+    |         |     3.3v <-> NES (or SNES) controller VCC A&B
+    |         |      gnd <-> NES (or SNES) controller GND A&B
+    |         | 
+    |      15 |------------> SD card CS
+    |      13 |------------> SD card MOSI
+    |      14 |------------> SD card SCLK
+    |      12 |------------> SD card MISO
+    |         |     3.3v <-> SD card Vcc
+    |         |      gnd <-> SD card GND
+    |         | 
+    |         |  3.3v <--+-|  IR Receiver
+    |         |   gnd <--|  ) TSOP4838 etc.
+    |       0 |----------+-|  (Optional)
+     ---------
 
-Before you compile the sketch you have 2 choices:
+NES        ___          SNES       _
+    DATA  |o o| NC          3V3   |o|
+    LATCH |o o| NC          CLOCK |o|
+    CLOCK |o o/ 3V3         LATCH |o|
+    GND   |o_/              DATA  |o|
+                                  |-|
+                            NC    |o|
+                            NC    |o|
+                            GND   |o|
+                                   - 
+	
 ```
-//  Choose one of the video standards: PAL, NTSC
-#define VIDEO_STANDARD NTSC
+Before you compile the sketch you have a few choices/options (in src/config.h):
+```
+// Enable NES or SNES controller with
+#define NES_CONTROLLER or #define SNES_CONTROLLER (but not both) as well as other IR units
 
-//  Choose one of the following emulators: EMU_NES,EMU_SMS, EMU_ATARI
-#define EMULATOR EMU_ATARI
+// Define this to enable SD card with FAT 8.3 filenames
+// Note that each emulator has its own folder. Place ROMs under /nofrendo for NES, /smsplus for SMS and /atari800 for atari
+#define USE_SD_CARD
+
+Audio is on pin 18 by default but can be remapped, this is true for the other IOs except video which has to be on pin 25/26.
 ```
+
 Build and run the sketch and connect to an old-timey composite input. The first time the sketch runs in will auto-populate the file system with a selection of fine old and new homebrew games and demos. This process only happens once and takes about ~20 seconds so don't be frightened by the black screen.
 
-# The Emulated
-
-## Atari 400/800, XL, XEGS, 5200
-Oh how I adore thee Atari 8 bit. 40 years on your cheery blue default background color and enigmatically wiggly built-in font still delights me. Your bizarre industrial design and [giant floppy drives](https://hackaday.com/2015/11/03/minituarizing-the-atari-disk-drive/) are the stuff of legend. Nice to see you back in this new incarnation.
-
-Atari support is built from the venerable Atari800 emulator. Some violence was done to move structures and tables into read-only flash. It does not support machines with 128k RAM.
-
-Enter/Exit GUI with F1. In GUI, '1' or '2' keys insert a disk (**.atr** file) into drives 1 or 2. A '0' key ejects the disk. Shift + Enter will insert Basic along with the selected disk. A 'filename.cfg' file can be used to override default settings. i.e.
-miner2049er.bin.cfg (for miner2049er.bin) would look like
 ```
--5200 -ntsc -cart-type 4 -cart
 ```
-File system is mounted as the "H1" device. See https://atari800.github.io/ for more details.
-
 | Keyboard | Atari |
 | ---------- | ----------- |
 | Arrow Keys | Joystick 1 |
@@ -119,18 +139,6 @@ This is the same emulator with which the brilliant and prolific [SpriteTM](https
 | Plus & Minus Together | Reset |
 
 # How it works
-
-## Composite Video
-Much as been written on generating color composite video with microcontrollers. [Rickard Gunée](https://elinux.org/images/e/eb/Howtocolor.pdf) kicked it off in 2003, with many fun variants emerging over the years. I enjoyed building the [RBox](https://hackaday.com/2010/10/27/smallest-gaming-console-ever-ever/) in 2010 that used a Cortex M0 and a R2R DAC to generate color NTSC, then in 2015 the [Arduinocade](https://hackaday.com/2015/09/17/retro-games-on-arduinocade-just-shouldnt-be-possible/) on an Arduino with upgraded crystal that used its SPI port to create the colors. Now that 2020 has given us all a little extra time at home its time to do another one.
-
-Now that we have fancy devices like the ESP8266/ESP32 we can be a little more ambitious. We have an order of magnitude more compute, two orders of magnitude more RAM, and three orders of magnitude more storage than an Arduino. And we have lots of new exotic new peripherals to play with. Using this newfound power [CNLohr](https://hackaday.com/2016/03/01/color-tv-broadcasts-are-esp8266s-newest-trick/) pulled off an amazing 1-bit Nyquist folding trick to produce a color NTSC broadcast on an ESP8266. [Bitluni](https://bitluni.net/esp32-color-pal) clocked the ESP32's DAC up to 13.3333Mhz and manged to create color PAL. Bitluni overview of how PAL works, his online visualization tools, his findings from spelunking around in the ESP32, and his other great projects are really worth exploring.
-
-The principle figure of merit for generating nice looking PAL or NTSC color is the accuracy and stability of the synthesized color carrier. Bitluni's clever technique used DDS to produce PAL carrier with ~3 DAC samples per cycle - close enough for most TVs to lock. Phase Alternate Line helps a lot here.
-
-NTSC is a lot more fussy about phase stability, jitter and frequency of its color carrier. DAC + DDS at 13.33Mhz produces a beautiful looking waveform but very sketchy color if any on most TVs.
-
-Turns out the ESP32 has a great tool for creating rock solid color carriers: The **Audio Phase Locked Loop**.
-
 ### The magic of the Audio PLL
 The ESP32 has a ultra-low-noise fractional-N PLL. It can be tuned to produce DAC sample rates up to **~20Mhz with very accurate frequency control**:
 
@@ -142,7 +150,6 @@ Its intended use is to be able to synchronize audio sources running at slightly 
 | Standard | (Carrier Frequency)*4 | APLL Frequency |
 | ---------- | ----------- | ----------- |
 | NTSC | 14.318182Mhz | 14.318180Mhz |
-| PAL | 17.734475Mhz | 17.734476Mhz |
 
 As you can see the APLL frequencies can be tuned to be incredibly close to the desired frequencies. Now we have a DAC running at an integer multiple of the color carrier we are off to the races with stable color on NTSC and PAL. From this point it is easy to construct color palettes that map indexed color to carrier phases / amplitudes.
 
@@ -214,5 +221,6 @@ If you would like to upload your own media copy them into the appropriate subfol
 Play through the included demos. Load up your own. Write some Atari Basic masterpiece. Type in a game from an old Antic magazine. Finally get around to finishing Zork.
 
 Enjoy,
-
 rossum
+
+fork BY zbigniewcebula

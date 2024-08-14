@@ -8,8 +8,8 @@
 **
 ** This program is distributed in the hope that it will be useful, 
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
-** Library General Public License for more details.  To obtain a 
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU 
+** Library General Public License for more details.	To obtain a 
 ** copy of the GNU Library General Public License, write to the Free 
 ** Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **
@@ -34,16 +34,16 @@ extern mapintf_t *mappers[];
 
 /*
 ** $Log: mmclist.h,v $
-** Revision 1.2  2001/04/27 14:37:11  neil
+** Revision 1.2	2001/04/27 14:37:11	neil
 ** wheeee
 **
-** Revision 1.1.1.1  2001/04/27 07:03:54  neil
+** Revision 1.1.1.1	2001/04/27 07:03:54	neil
 ** initial
 **
-** Revision 1.1  2000/10/24 12:20:28  matt
+** Revision 1.1	2000/10/24 12:20:28	matt
 ** changed directory structure
 **
-** Revision 1.1  2000/07/31 04:27:40  matt
+** Revision 1.1	2000/07/31 04:27:40	matt
 ** initial revision
 **
 */

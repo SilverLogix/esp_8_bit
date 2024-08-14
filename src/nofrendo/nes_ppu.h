@@ -8,8 +8,8 @@
 **
 ** This program is distributed in the hope that it will be useful, 
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
-** Library General Public License for more details.  To obtain a 
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU 
+** Library General Public License for more details.	To obtain a 
 ** copy of the GNU Library General Public License, write to the Free 
 ** Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **
@@ -29,45 +29,45 @@
 #include "bitmap.h"
 
 /* PPU register defines */
-#define  PPU_CTRL0            0x2000
-#define  PPU_CTRL1            0x2001
-#define  PPU_STAT             0x2002
-#define  PPU_OAMADDR          0x2003
-#define  PPU_OAMDATA          0x2004
-#define  PPU_SCROLL           0x2005
-#define  PPU_VADDR            0x2006
-#define  PPU_VDATA            0x2007
+#define	PPU_CTRL0						0x2000
+#define	PPU_CTRL1						0x2001
+#define	PPU_STAT						0x2002
+#define	PPU_OAMADDR					0x2003
+#define	PPU_OAMDATA					0x2004
+#define	PPU_SCROLL					0x2005
+#define	PPU_VADDR						0x2006
+#define	PPU_VDATA						0x2007
 
-#define  PPU_OAMDMA           0x4014
-#define  PPU_JOY0             0x4016
-#define  PPU_JOY1             0x4017
+#define	PPU_OAMDMA					0x4014
+#define	PPU_JOY0						0x4016
+#define	PPU_JOY1						0x4017
 
 /* $2000 */
-#define  PPU_CTRL0F_NMI       0x80
-#define  PPU_CTRL0F_OBJ16     0x20
-#define  PPU_CTRL0F_BGADDR    0x10
-#define  PPU_CTRL0F_OBJADDR   0x08
-#define  PPU_CTRL0F_ADDRINC   0x04
-#define  PPU_CTRL0F_NAMETAB   0x03
+#define	PPU_CTRL0F_NMI			0x80
+#define	PPU_CTRL0F_OBJ16		0x20
+#define	PPU_CTRL0F_BGADDR		0x10
+#define	PPU_CTRL0F_OBJADDR	0x08
+#define	PPU_CTRL0F_ADDRINC	0x04
+#define	PPU_CTRL0F_NAMETAB	0x03
 
 /* $2001 */
-#define  PPU_CTRL1F_OBJON     0x10
-#define  PPU_CTRL1F_BGON      0x08
-#define  PPU_CTRL1F_OBJMASK   0x04
-#define  PPU_CTRL1F_BGMASK    0x02
+#define	PPU_CTRL1F_OBJON		0x10
+#define	PPU_CTRL1F_BGON			0x08
+#define	PPU_CTRL1F_OBJMASK	0x04
+#define	PPU_CTRL1F_BGMASK		0x02
 
 /* $2002 */
-#define  PPU_STATF_VBLANK     0x80
-#define  PPU_STATF_STRIKE     0x40
-#define  PPU_STATF_MAXSPRITE  0x20
+#define	PPU_STATF_VBLANK		0x80
+#define	PPU_STATF_STRIKE		0x40
+#define	PPU_STATF_MAXSPRITE	0x20
 
 /* Sprite attribute byte bitmasks */
-#define  OAMF_VFLIP           0x80
-#define  OAMF_HFLIP           0x40
-#define  OAMF_BEHIND          0x20
+#define	OAMF_VFLIP					0x80
+#define	OAMF_HFLIP					0x40
+#define	OAMF_BEHIND					0x20
 
 /* Maximum number of sprites per horizontal scanline */
-#define  PPU_MAXSPRITE        8
+#define	PPU_MAXSPRITE				8
 
 /* some mappers do *dumb* things */
 typedef void (*ppulatchfunc_t)(uint32 address, uint8 value);
@@ -75,42 +75,42 @@ typedef void (*ppuvromswitch_t)(uint8 value);
 
 typedef struct ppu_s
 {
-   /* big nasty memory chunks */
-   uint8 nametab[0x1000];
-   uint8 oam[256];
-   uint8 palette[32];
-   uint8 *page[16];
+	/* big nasty memory chunks */
+	uint8 nametab[0x1000];
+	uint8 oam[256];
+	uint8 palette[32];
+	uint8 *page[16];
 
-   /* hardware registers */
-   uint8 ctrl0, ctrl1, stat, oam_addr;
-   uint32 vaddr, vaddr_latch;
-   int tile_xofs, flipflop;
-   int vaddr_inc;
-   uint32 tile_nametab;
+	/* hardware registers */
+	uint8 ctrl0, ctrl1, stat, oam_addr;
+	uint32 vaddr, vaddr_latch;
+	int tile_xofs, flipflop;
+	int vaddr_inc;
+	uint32 tile_nametab;
 
-   uint8 obj_height;
-   uint32 obj_base, bg_base;
+	uint8 obj_height;
+	uint32 obj_base, bg_base;
 
-   bool bg_on, obj_on;
-   bool obj_mask, bg_mask;
-   
-   uint8 latch, vdata_latch;
-   uint8 strobe;
+	bool bg_on, obj_on;
+	bool obj_mask, bg_mask;
+	
+	uint8 latch, vdata_latch;
+	uint8 strobe;
 
-   bool strikeflag;
-   uint32 strike_cycle;
+	bool strikeflag;
+	uint32 strike_cycle;
 
-   /* callbacks for naughty mappers */
-   ppulatchfunc_t latchfunc;
-   ppuvromswitch_t vromswitch;
+	/* callbacks for naughty mappers */
+	ppulatchfunc_t latchfunc;
+	ppuvromswitch_t vromswitch;
 
-   /* copy of our current palette */
-   rgb_t curpal[256];
+	/* copy of our current palette */
+	rgb_t curpal[256];
 
-   bool vram_accessible;
+	bool vram_accessible;
 
-   bool vram_present;
-   bool drawsprites;
+	bool vram_present;
+	bool drawsprites;
 } ppu_t;
 
 
@@ -160,82 +160,82 @@ extern void ppu_displaysprites(bool display);
 
 /*
 ** $Log: nes_ppu.h,v $
-** Revision 1.2  2001/04/27 14:37:11  neil
+** Revision 1.2	2001/04/27 14:37:11	neil
 ** wheeee
 **
-** Revision 1.1.1.1  2001/04/27 07:03:54  neil
+** Revision 1.1.1.1	2001/04/27 07:03:54	neil
 ** initial
 **
-** Revision 1.8  2000/11/29 12:58:23  matt
+** Revision 1.8	2000/11/29 12:58:23	matt
 ** timing/fiq fixes
 **
-** Revision 1.7  2000/11/27 19:36:16  matt
+** Revision 1.7	2000/11/27 19:36:16	matt
 ** more timing fixes
 **
-** Revision 1.6  2000/11/26 15:51:13  matt
+** Revision 1.6	2000/11/26 15:51:13	matt
 ** frame IRQ emulation
 **
-** Revision 1.5  2000/11/25 20:30:39  matt
+** Revision 1.5	2000/11/25 20:30:39	matt
 ** scanline emulation simplifications/timing fixes
 **
-** Revision 1.4  2000/11/19 13:40:19  matt
+** Revision 1.4	2000/11/19 13:40:19	matt
 ** more accurate ppu behavior
 **
-** Revision 1.3  2000/11/05 16:35:41  matt
+** Revision 1.3	2000/11/05 16:35:41	matt
 ** rolled rgb.h into bitmap.h
 **
-** Revision 1.2  2000/10/27 12:55:03  matt
+** Revision 1.2	2000/10/27 12:55:03	matt
 ** palette generating functions now take *this pointers
 **
-** Revision 1.1  2000/10/24 12:20:28  matt
+** Revision 1.1	2000/10/24 12:20:28	matt
 ** changed directory structure
 **
-** Revision 1.19  2000/10/22 15:02:32  matt
+** Revision 1.19	2000/10/22 15:02:32	matt
 ** simplified mirroring
 **
-** Revision 1.18  2000/10/21 21:36:04  matt
+** Revision 1.18	2000/10/21 21:36:04	matt
 ** ppu cleanups / fixes
 **
-** Revision 1.17  2000/10/21 19:26:59  matt
+** Revision 1.17	2000/10/21 19:26:59	matt
 ** many more cleanups
 **
-** Revision 1.16  2000/10/10 13:58:15  matt
+** Revision 1.16	2000/10/10 13:58:15	matt
 ** stroustrup squeezing his way in the door
 **
-** Revision 1.15  2000/07/31 04:27:59  matt
+** Revision 1.15	2000/07/31 04:27:59	matt
 ** one million cleanups
 **
-** Revision 1.14  2000/07/30 04:32:33  matt
+** Revision 1.14	2000/07/30 04:32:33	matt
 ** emulation of the NES frame IRQ
 **
-** Revision 1.13  2000/07/25 02:25:53  matt
+** Revision 1.13	2000/07/25 02:25:53	matt
 ** safer xxx_destroy calls
 **
-** Revision 1.12  2000/07/17 05:12:56  matt
+** Revision 1.12	2000/07/17 05:12:56	matt
 ** nes_ppu.c is no longer a scary place to be-- cleaner & faster
 **
-** Revision 1.11  2000/07/17 01:52:28  matt
+** Revision 1.11	2000/07/17 01:52:28	matt
 ** made sure last line of all source files is a newline
 **
-** Revision 1.10  2000/07/10 05:28:30  matt
+** Revision 1.10	2000/07/10 05:28:30	matt
 ** moved joypad/oam dma from apu to ppu
 **
-** Revision 1.9  2000/07/10 03:03:16  matt
+** Revision 1.9	2000/07/10 03:03:16	matt
 ** added ppu_getcontext() routine
 **
-** Revision 1.8  2000/07/06 16:42:40  matt
+** Revision 1.8	2000/07/06 16:42:40	matt
 ** better palette setting interface
 **
-** Revision 1.7  2000/07/04 23:13:26  matt
+** Revision 1.7	2000/07/04 23:13:26	matt
 ** added an irq line drawing debug feature hack
 **
-** Revision 1.6  2000/06/26 04:58:08  matt
+** Revision 1.6	2000/06/26 04:58:08	matt
 ** accuracy changes
 **
-** Revision 1.5  2000/06/20 00:04:35  matt
+** Revision 1.5	2000/06/20 00:04:35	matt
 ** removed STATQUIRK macro
 **
-** Revision 1.4  2000/06/09 15:12:26  matt
+** Revision 1.4	2000/06/09 15:12:26	matt
 ** initial revision
 **
 */

@@ -26,12 +26,12 @@ typedef void* hci_handle;
 typedef void (*hci_on_packet_handler)(hci_handle h, const uint8_t* d, int len, void* ref);
 typedef void (*hci_on_ready_to_send_handler)(hci_handle h, void* ref);
 
-hci_handle  hci_open();
-int         hci_close(hci_handle h);
-void        hci_set_packet_handler(hci_handle h, hci_on_packet_handler p, void* ref);
-void        hci_set_ready_to_send_handler(hci_handle h, hci_on_ready_to_send_handler p, void* ref);
-int         hci_send(hci_handle h, const uint8_t* d, int len);
-int         hci_send_available(hci_handle h);
+hci_handle	hci_open();
+int			hci_close(hci_handle h);
+void		hci_set_packet_handler(hci_handle h, hci_on_packet_handler p, void* ref);
+void		hci_set_ready_to_send_handler(hci_handle h, hci_on_ready_to_send_handler p, void* ref);
+int			hci_send(hci_handle h, const uint8_t* d, int len);
+int			hci_send_available(hci_handle h);
 
 #ifdef __cplusplus
 }

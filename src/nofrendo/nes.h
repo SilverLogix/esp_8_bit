@@ -8,8 +8,8 @@
 **
 ** This program is distributed in the hope that it will be useful, 
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
-** Library General Public License for more details.  To obtain a 
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU 
+** Library General Public License for more details.	To obtain a 
 ** copy of the GNU Library General Public License, write to the Free 
 ** Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **
@@ -36,58 +36,54 @@
 
 /* Visible (NTSC) screen height */
 #ifndef NES_VISIBLE_HEIGHT
-#define  NES_VISIBLE_HEIGHT   224
+#define	NES_VISIBLE_HEIGHT	224
 #endif /* !NES_VISIBLE_HEIGHT */
-#define  NES_SCREEN_WIDTH     256
-#define  NES_SCREEN_HEIGHT    240
 
-/* NTSC = 60Hz, PAL = 50Hz */
-#ifdef PAL
-#define  NES_REFRESH_RATE     50
-#else /* !PAL */
+#define	NES_SCREEN_WIDTH		256
+#define	NES_SCREEN_HEIGHT		240
+
 #define  NES_REFRESH_RATE     60
-#endif /* !PAL */
 
-#define  MAX_MEM_HANDLERS     32
+#define	MAX_MEM_HANDLERS		32
 
 enum
 {
-   SOFT_RESET,
-   HARD_RESET
+	SOFT_RESET,
+	HARD_RESET
 };
 
 
 typedef struct nes_s
 {
-   /* hardware things */
-   nes6502_context *cpu;
-   nes6502_memread readhandler[MAX_MEM_HANDLERS];
-   nes6502_memwrite writehandler[MAX_MEM_HANDLERS];
+	/* hardware things */
+	nes6502_context *cpu;
+	nes6502_memread readhandler[MAX_MEM_HANDLERS];
+	nes6502_memwrite writehandler[MAX_MEM_HANDLERS];
 
-   ppu_t *ppu;
-   apu_t *apu;
-   mmc_t *mmc;
-   rominfo_t *rominfo;
+	ppu_t *ppu;
+	apu_t *apu;
+	mmc_t *mmc;
+	rominfo_t *rominfo;
 
-   /* video buffer */
-   /* For the ESP32, it costs too much memory to render to a separate buffer and blit that to the main buffer.
-      Instead, the code has been modified to directly grab the primary buffer from the video subsystem and render
-      there, saving us about 64K of memory. */
-//   bitmap_t *vidbuf; 
+	/* video buffer */
+	/* For the ESP32, it costs too much memory to render to a separate buffer and blit that to the main buffer.
+			Instead, the code has been modified to directly grab the primary buffer from the video subsystem and render
+			there, saving us about 64K of memory. */
+//	bitmap_t *vidbuf; 
 
-   bool fiq_occurred;
-   uint8 fiq_state;
-   int fiq_cycles;
+	bool fiq_occurred;
+	uint8 fiq_state;
+	int fiq_cycles;
 
-   int scanline;
+	int scanline;
 
-   /* Timing stuff */
-   float scanline_cycles;
-   bool autoframeskip;
+	/* Timing stuff */
+	float scanline_cycles;
+	bool autoframeskip;
 
-   /* control */
-   bool poweroff;
-   bool pause;
+	/* control */
+	bool poweroff;
+	bool pause;
 
 } nes_t;
 
@@ -119,103 +115,103 @@ extern void nes_togglepause(void);
 
 /*
 ** $Log: nes.h,v $
-** Revision 1.2  2001/04/27 14:37:11  neil
+** Revision 1.2	2001/04/27 14:37:11	neil
 ** wheeee
 **
-** Revision 1.1.1.1  2001/04/27 07:03:54  neil
+** Revision 1.1.1.1	2001/04/27 07:03:54	neil
 ** initial
 **
-** Revision 1.8  2000/11/26 15:51:13  matt
+** Revision 1.8	2000/11/26 15:51:13	matt
 ** frame IRQ emulation
 **
-** Revision 1.7  2000/11/25 20:30:39  matt
+** Revision 1.7	2000/11/25 20:30:39	matt
 ** scanline emulation simplifications/timing fixes
 **
-** Revision 1.6  2000/11/25 01:52:17  matt
+** Revision 1.6	2000/11/25 01:52:17	matt
 ** bool stinks sometimes
 **
-** Revision 1.5  2000/11/09 14:07:28  matt
+** Revision 1.5	2000/11/09 14:07:28	matt
 ** state load fixed, state save mostly fixed
 **
-** Revision 1.4  2000/10/29 14:36:45  matt
+** Revision 1.4	2000/10/29 14:36:45	matt
 ** nes_clearframeirq is static
 **
-** Revision 1.3  2000/10/25 01:23:08  matt
+** Revision 1.3	2000/10/25 01:23:08	matt
 ** basic system autodetection
 **
-** Revision 1.2  2000/10/25 00:23:16  matt
+** Revision 1.2	2000/10/25 00:23:16	matt
 ** makefiles updated for new directory structure
 **
-** Revision 1.1  2000/10/24 12:20:28  matt
+** Revision 1.1	2000/10/24 12:20:28	matt
 ** changed directory structure
 **
-** Revision 1.26  2000/10/23 17:51:10  matt
+** Revision 1.26	2000/10/23 17:51:10	matt
 ** adding fds support
 **
-** Revision 1.25  2000/10/23 15:53:08  matt
+** Revision 1.25	2000/10/23 15:53:08	matt
 ** better system handling
 **
-** Revision 1.24  2000/10/22 19:16:15  matt
+** Revision 1.24	2000/10/22 19:16:15	matt
 ** more sane timer ISR / autoframeskip
 **
-** Revision 1.23  2000/10/21 19:26:59  matt
+** Revision 1.23	2000/10/21 19:26:59	matt
 ** many more cleanups
 **
-** Revision 1.22  2000/10/10 13:58:15  matt
+** Revision 1.22	2000/10/10 13:58:15	matt
 ** stroustrup squeezing his way in the door
 **
-** Revision 1.21  2000/10/08 17:53:36  matt
+** Revision 1.21	2000/10/08 17:53:36	matt
 ** minor accuracy changes
 **
-** Revision 1.20  2000/09/15 04:58:07  matt
+** Revision 1.20	2000/09/15 04:58:07	matt
 ** simplifying and optimizing APU core
 **
-** Revision 1.19  2000/09/08 11:57:29  matt
+** Revision 1.19	2000/09/08 11:57:29	matt
 ** no more nes_fiq
 **
-** Revision 1.18  2000/08/11 02:43:50  matt
+** Revision 1.18	2000/08/11 02:43:50	matt
 ** moved frame irq stuff out of APU into here
 **
-** Revision 1.17  2000/07/31 04:27:59  matt
+** Revision 1.17	2000/07/31 04:27:59	matt
 ** one million cleanups
 **
-** Revision 1.16  2000/07/30 04:32:32  matt
+** Revision 1.16	2000/07/30 04:32:32	matt
 ** emulation of the NES frame IRQ
 **
-** Revision 1.15  2000/07/27 01:17:09  matt
+** Revision 1.15	2000/07/27 01:17:09	matt
 ** nes_insertrom -> nes_insertcart
 **
-** Revision 1.14  2000/07/26 21:36:16  neil
+** Revision 1.14	2000/07/26 21:36:16	neil
 ** Big honkin' change -- see the mailing list
 **
-** Revision 1.13  2000/07/25 02:25:53  matt
+** Revision 1.13	2000/07/25 02:25:53	matt
 ** safer xxx_destroy calls
 **
-** Revision 1.12  2000/07/23 15:13:13  matt
+** Revision 1.12	2000/07/23 15:13:13	matt
 ** autoframeskip is now a member variable of nes_t
 **
-** Revision 1.11  2000/07/17 05:12:55  matt
+** Revision 1.11	2000/07/17 05:12:55	matt
 ** nes_ppu.c is no longer a scary place to be-- cleaner & faster
 **
-** Revision 1.10  2000/07/17 01:52:28  matt
+** Revision 1.10	2000/07/17 01:52:28	matt
 ** made sure last line of all source files is a newline
 **
-** Revision 1.9  2000/07/16 09:48:58  neil
+** Revision 1.9	2000/07/16 09:48:58	neil
 ** Make visible height compile-time configurable in the Makefile
 **
-** Revision 1.8  2000/07/11 04:31:55  matt
+** Revision 1.8	2000/07/11 04:31:55	matt
 ** less magic number nastiness for screen dimensions
 **
-** Revision 1.7  2000/07/11 02:40:36  matt
+** Revision 1.7	2000/07/11 02:40:36	matt
 ** forgot to remove framecounter
 **
-** Revision 1.6  2000/07/11 02:38:25  matt
+** Revision 1.6	2000/07/11 02:38:25	matt
 ** encapsulated memory address handlers into nes/nsf
 **
-** Revision 1.5  2000/07/10 13:50:50  matt
+** Revision 1.5	2000/07/10 13:50:50	matt
 ** added function nes_irq()
 **
-** Revision 1.4  2000/06/09 15:12:26  matt
+** Revision 1.4	2000/06/09 15:12:26	matt
 ** initial revision
 **
 */

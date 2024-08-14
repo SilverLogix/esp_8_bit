@@ -8,8 +8,8 @@
 **
 ** This program is distributed in the hope that it will be useful, 
 ** but WITHOUT ANY WARRANTY; without even the implied warranty of
-** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the GNU 
-** Library General Public License for more details.  To obtain a 
+** MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.	See the GNU 
+** Library General Public License for more details.	To obtain a 
 ** copy of the GNU Library General Public License, write to the Free 
 ** Software Foundation, Inc., 675 Mass Ave, Cambridge, MA 02139, USA.
 **
@@ -39,19 +39,19 @@ extern void log_assert(int expr, int line, const char *file, char *msg);
 
 /*
 ** $Log: log.h,v $
-** Revision 1.1.1.1  2001/04/27 07:03:54  neil
+** Revision 1.1.1.1	2001/04/27 07:03:54	neil
 ** initial
 **
-** Revision 1.7  2000/11/06 02:15:07  matt
+** Revision 1.7	2000/11/06 02:15:07	matt
 ** more robust logging routines
 **
-** Revision 1.6  2000/10/10 13:03:54  matt
+** Revision 1.6	2000/10/10 13:03:54	matt
 ** Mr. Clean makes a guest appearance
 **
-** Revision 1.5  2000/07/17 01:52:27  matt
+** Revision 1.5	2000/07/17 01:52:27	matt
 ** made sure last line of all source files is a newline
 **
-** Revision 1.4  2000/06/09 15:12:25  matt
+** Revision 1.4	2000/06/09 15:12:25	matt
 ** initial revision
 **
 */
