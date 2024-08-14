@@ -310,6 +310,7 @@ const char* _menu[] = {
 	"Files",
 	"Info",
 	"Help",
+	"Debug",
 	NULL
 };
 
@@ -962,10 +963,6 @@ void gui_update()
 
 		uint8_t buf[64];
 		int n = hid_get(buf,sizeof(buf));		// called from emulation loop
-		if (n > 0)
-				gui_hid(buf,n);
-		
-		n = get_hid_ir(buf);
 		if (n > 0)
 				gui_hid(buf,n);
 }

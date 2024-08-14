@@ -16,7 +16,6 @@
 /****************************************************************/
 #define VIDEO_PIN   25	// Both 25 and 26 are locked to video output
 #define AUDIO_PIN   18  // can be any pin
-#define IR_PIN      0   // TSOP4838 or equivalent on any pin if desired
 
 //NES OR SNES classic controller (wire colors might be different, double check!)
 //       ___
