@@ -110,9 +110,9 @@ IRState _nes;
 int get_hid_nes(uint8_t* dst)
 {
 	digitalWrite(NES_CTRL_LATCH, 1);
-	delayMicroseconds(0);
+	delayMicroseconds(CONTROLLER_TIMING);
 	digitalWrite(NES_CTRL_LATCH, 0);
-	delayMicroseconds(0);
+	delayMicroseconds(CONTROLLER_TIMING);
 
 	uint16_t buttonsA = 0;
 	uint16_t buttonsB = 0;
@@ -121,9 +121,9 @@ int get_hid_nes(uint8_t* dst)
 			buttonsA |= (1^digitalRead(NES_CTRL_ADATA)) * map_nes[i];
 			buttonsB |= (1^digitalRead(NES_CTRL_BDATA)) * map_nes[i];
 			digitalWrite(NES_CTRL_CLK, 0);
-			delayMicroseconds(0);
+			delayMicroseconds(CONTROLLER_TIMING);
 			digitalWrite(NES_CTRL_CLK, 1);
-			delayMicroseconds(0);
+			delayMicroseconds(CONTROLLER_TIMING);
 		}
 	//printf("NESCTRL:%04X %04X\n", buttonsA, buttonsB);
   
@@ -162,9 +162,9 @@ IRState _snes;
 int get_hid_snes(uint8_t* dst)
 {
 	digitalWrite(NES_CTRL_LATCH, 1);
-	delayMicroseconds(0);
+	delayMicroseconds(CONTROLLER_TIMING);
 	digitalWrite(NES_CTRL_LATCH, 0);
-	delayMicroseconds(0);
+	delayMicroseconds(CONTROLLER_TIMING);
 
 	uint16_t buttonsA = 0;
 	uint16_t buttonsB = 0;
@@ -173,9 +173,9 @@ int get_hid_snes(uint8_t* dst)
 			buttonsA |= (1^digitalRead(NES_CTRL_ADATA)) * map_snes[i];
 			buttonsB |= (1^digitalRead(NES_CTRL_BDATA)) * map_snes[i];
 			digitalWrite(NES_CTRL_CLK, 0);
-			delayMicroseconds(0);
+			delayMicroseconds(CONTROLLER_TIMING);
 			digitalWrite(NES_CTRL_CLK, 1);
-			delayMicroseconds(0);
+			delayMicroseconds(CONTROLLER_TIMING);
 		}
 	//printf("SNESCTRL:%04X %04X\n", buttonsA, buttonsB);
   

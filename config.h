@@ -54,6 +54,10 @@
 //GND   |o|
 //       -  
 
+// Some (3rd party) NES/SNES controllers may need slower clocks to work properly...
+// If you get erratic button behaviour try to change to a higher value, but no more than 6 should be needed
+#define CONTROLLER_TIMING 0 // delay in us
+
 //NES and SNES controllers share the same pins, therefore both types can not be used at the same time
 //Only the DATA pin goes to different IO pins for the two controllers the other pins are shared
 //3V3 (red) (NOT 5V!)

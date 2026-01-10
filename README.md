@@ -89,7 +89,7 @@ Before you compile the sketch you have a few choices/options (in config.h):
 Audio is on pin 18 by default but can be remapped, this is true for the other IOs except video which has to be on pin 25/26.
 ```
 
-Build and run the sketch and connect to an old-timey composite input. The first time the sketch runs in will auto-populate the file system with a selection of fine old and new homebrew games and demos. This process only happens once and takes about ~20 seconds so don't be frightened by the black screen.
+Build and run the sketch and connect to a TV composite input. The first time the sketch runs in will auto-populate the file system with a selection of fine old and new homebrew games and demos. This process only happens once and takes about ~20 seconds so don't be frightened by the black screen.
 
 # The Emulated
 
